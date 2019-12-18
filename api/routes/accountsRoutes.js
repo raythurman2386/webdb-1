@@ -21,7 +21,12 @@ const getAccountById = async (req, res, next) => {
 }
 const addAccount = async (req, res, next) => {
   try {
-
+    const payload = {
+      name: req.body.name,
+      budget: req.body.budget
+    }
+    const id = await db('accounts').insert(payload)
+    res.status(201).json(await db('accounts').where({ id: id }));
   } catch (error) {
     next(error)
   }
