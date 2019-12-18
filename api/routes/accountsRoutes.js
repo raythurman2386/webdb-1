@@ -26,7 +26,7 @@ const addAccount = async (req, res, next) => {
       budget: req.body.budget
     }
     const id = await db('accounts').insert(payload)
-    res.status(201).json(await db('accounts').where({ id: id }));
+    return res.status(201).json(await db('accounts').where({ id: id }));
   } catch (error) {
     next(error)
   }
@@ -34,14 +34,20 @@ const addAccount = async (req, res, next) => {
 
 const updateAccount = async (req, res, next) => {
   try {
-
+    const payload = {
+      name: req.body.name,
+      budget: req.body.budget
+    }
+    const id = await db('accounts').where({ id: req.params.id }).update(payload)
+    return res.status(201).json(await db('accounts').where({ id: id }));
   } catch (error) {
     next(error)
   }
 }
 const deleteAccount = async (req, res, next) => {
   try {
-
+    const deleted = await db('accounts').where({ id: req.params.id }).del()
+    return res.status(204).json({ message: "Account Deleted" });
   } catch (error) {
     next(error)
   }
